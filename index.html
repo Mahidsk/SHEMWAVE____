@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHEMWAVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #FF6B35; /* Sports Orange */
+            --primary-dark: #E55A2B;
+            --secondary: #00B4D8; /* Bright Blue */
+            --accent: #4CC9F0; /* Light Blue */
+            --success: #4ADE80; /* Green */
+            --warning: #FACC15; /* Yellow */
+            --danger: #FF4D4D; /* Red */
+            --dark: #121212;
+            --darker: #0A0A0A;
+            --card-dark: #1A1A1A;
+            --card-light: #222222;
+            --text: #FFFFFF;
+            --text-muted: #BBBBBB;
+            --text-dark: #666666;
+            --gradient-1: linear-gradient(135deg, #FF6B35, #FF8E53);
+            --gradient-2: linear-gradient(135deg, #00B4D8, #4CC9F0);
+            --gradient-3: linear-gradient(135deg, #4ADE80, #22C55E);
+            --gradient-dark: linear-gradient(135deg, #1A1A1A, #222222);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(255, 107, 53, 0.4);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), #1A1A1A);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 16px;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: var(--shadow-sm);
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            transform: rotate(10deg);
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--gradient-dark);
+            border-radius: 12px;
+            margin: 16px 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 24px 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header i {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-header h3 {
+            font-weight: 700;
+            font-size: 1.3rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-badge {
+            background: var(--gradient-2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Device Cards - Sports Style */
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .device-card {
+            background: var(--gradient-dark);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .device-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .device-card.on {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .device-card.on::before {
+            background: var(--gradient-3);
+        }
+
+        .device-card:active {
+            transform: translateY(2px) scale(0.98);
+            background: var(--gradient-dark);
+            transition: transform 0.1s ease;
+        }
+
+        .device-card.vibrate {
+            animation: vibrate 0.2s ease;
+        }
+
+        @keyframes vibrate {
+            0% { transform: translateX(0) rotate(0); }
+            25% { transform: translateX(-2px) rotate(-0.5deg); }
+            50% { transform: translateX(2px) rotate(0.5deg); }
+            75% { transform: translateX(-1px) rotate(-0.25deg); }
+            100% { transform: translateX(0) rotate(0); }
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .device-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            background: rgba(255, 107, 53, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .device-card.on .device-icon {
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--success);
+            border-color: rgba(74, 222, 128, 0.3);
+            animation: iconPulse 0.5s ease;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .device-status {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .device-card.on .device-status {
+            background: var(--gradient-3);
+            color: white;
+        }
+
+        .device-info {
+            margin-top: 16px;
+        }
+
+        .device-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .device-card.on .device-name {
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+        }
+
+        .device-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Toggle Switch - Sports Style */
+        .toggle-switch {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 34px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input:checked + .slider {
+            background: var(--gradient-3);
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(27px);
+            background: white;
+        }
+
+        /* Login Form */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--darker), #1A1A1A);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--gradient-dark);
+            border-radius: 24px;
+            padding: 40px 35px;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-1);
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            background: var(--gradient-1);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn.vibrate {
+            animation: buttonVibrate 0.2s ease;
+        }
+
+        @keyframes buttonVibrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-secondary {
+            background: var(--gradient-dark);
+            border: 2px solid var(--primary);
+        }
+
+        .error-message {
+            color: var(--danger);
+            text-align: center;
+            margin-top: 16px;
+            min-height: 20px;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.2);
+        }
+
+        /* User Info */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Bottom Navigation - Sports Style */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 16px;
+            border-top: 2px solid var(--primary);
+            z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-item:active {
+            transform: translateY(0) scale(0.95);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .device-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .device-card:nth-child(1) { animation-delay: 0.1s; }
+        .device-card:nth-child(2) { animation-delay: 0.2s; }
+        .device-card:nth-child(3) { animation-delay: 0.3s; }
+        .device-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        .device-card.on .device-icon {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .devices-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .device-card {
+                min-height: 150px;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .login-card {
+                max-width: 400px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Schedule View */
+        .schedule-view {
+            padding: 20px;
+        }
+
+        .schedule-card {
+            background: var(--gradient-dark);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .schedule-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-2);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .schedule-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .schedule-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .time-input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.2);
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .select-field:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.2);
+        }
+
+        /* Settings View */
+        .settings-view {
+            padding: 20px;
+        }
+
+        .settings-card {
+            background: var(--gradient-dark);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .settings-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-1);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(5px);
+        }
+
+        .settings-item:active {
+            transform: translateX(0) scale(0.99);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 107, 53, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+            border: 2px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .settings-content {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .settings-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .settings-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Success/Error Animation */
+        .success-animation {
+            animation: successPulse 0.5s ease;
+        }
+
+        @keyframes successPulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        .error-animation {
+            animation: errorPulse 0.5s ease;
+        }
+
+        @keyframes errorPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 77, 77, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
+
+        /* Score Badge */
+        .score-badge {
+            background: var(--gradient-1);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Stats Counter Animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-value {
+            animation: countUp 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login View -->
+    <div id="loginView" class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">SHEMWAVE</h1>
+            <div class="input-group">
+                <label class="input-label">Email</label>
+                <input type="email" id="loginEmail" class="input-field" placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Password</label>
+                <input type="password" id="loginPassword" class="input-field" placeholder="Enter your password">
+            </div>
+            <button id="loginBtn" class="btn">Login</button>
+            <button id="signupBtn" class="btn btn-secondary" style="margin-top: 10px;">Sign Up</button>
+            <div id="loginError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- App View -->
+    <div id="appView" class="hidden">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="logo-text">SHEMWAVE</div>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="userName">User</div>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="container">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="devicesOn">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="devicesOff">6</div>
+                    <div class="stat-label">Inactive</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalSchedules">0</div>
+                    <div class="stat-label">Schedules</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="uptime">0h 0m</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home View -->
+        <div id="homeView" class="container">
+            <!-- Main Controls -->
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-sliders-h"></i>
+                    <h3>CONTROL PANEL</h3>
+                </div>
+                <div class="section-badge" id="activeCount">0 ACTIVE</div>
+            </div>
+            <div class="devices-grid" id="devicesGrid">
+                <!-- 6 switches will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Schedule View -->
+        <div id="scheduleView" class="schedule-view hidden">
+            <div class="schedule-card">
+                <div class="schedule-header">
+                    <div class="schedule-title">NEW SCHEDULE</div>
+                    <div class="score-badge">
+                        <i class="fas fa-clock"></i>
+                        <span id="totalSchedules2">0</span>
+                    </div>
+                </div>
+                <div class="schedule-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="input-label">DEVICE</label>
+                            <select id="scheduleDevice" class="select-field">
+                                <!-- Devices will be dynamically added -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">ACTION</label>
+                            <select id="scheduleAction" class="select-field">
+                                <option value="on">Turn On</option>
+                                <option value="off">Turn Off</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="input-label">TIME</label>
+                            <input type="time" id="scheduleTime" class="time-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">REPEAT</label>
+                            <select id="scheduleRepeat" class="select-field">
+                                <option value="once">Once</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekdays">Weekdays</option>
+                                <option value="weekends">Weekends</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="addScheduleBtn" class="btn">ADD SCHEDULE</button>
+                </div>
+            </div>
+
+            <div class="schedule-list" id="scheduleList">
+                <!-- Schedules will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settingsView" class="settings-view hidden">
+            <div class="settings-card">
+                <div class="settings-item">
+                    <div class="settings-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title" id="profileName">PROFILE</div>
+                        <div class="settings-desc">Manage your account settings</div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--primary);"></i>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">NOTIFICATIONS</div>
+                        <div class="settings-desc" id="notificationStatus">Game alerts are ON</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notificationToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-item" id="logoutBtn">
+                    <div class="settings-icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">LOGOUT</div>
+                        <div class="settings-desc">Sign out of your account</div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--primary);"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" data-view="homeView">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div>HOME</div>
+            </div>
+            <div class="nav-item" data-view="scheduleView">
+                <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div>SCHEDULE</div>
+            </div>
+            <div class="nav-item" data-view="settingsView">
+                <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                <div>PROFILE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkjDnnO-8pLo6nluPc0YfqVFke-EFOxNs",
+            authDomain: "shemwave-sample.firebaseapp.com",
+            databaseURL: "https://shemwave-sample-default-rtdb.firebaseio.com",
+            projectId: "shemwave-sample",
+            storageBucket: "shemwave-sample.firebasestorage.app",
+            messagingSenderId: "538284696022",
+            appId: "1:538284696022:web:45ba3733e8a831165b0477",
+            measurementId: "G-VZBK92Y9F6"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // DOM elements
+        const loginView = document.getElementById('loginView');
+        const appView = document.getElementById('appView');
+        const homeView = document.getElementById('homeView');
+        const scheduleView = document.getElementById('scheduleView');
+        const settingsView = document.getElementById('settingsView');
+        const loginEmail = document.getElementById('loginEmail');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginError = document.getElementById('loginError');
+        const userName = document.getElementById('userName');
+        const profileName = document.getElementById('profileName');
+        const devicesGrid = document.getElementById('devicesGrid');
+        const navItems = document.querySelectorAll('.nav-item');
+        const scheduleDevice = document.getElementById('scheduleDevice');
+        const scheduleTime = document.getElementById('scheduleTime');
+        const scheduleAction = document.getElementById('scheduleAction');
+        const scheduleRepeat = document.getElementById('scheduleRepeat');
+        const addScheduleBtn = document.getElementById('addScheduleBtn');
+        const scheduleList = document.getElementById('scheduleList');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const notificationToggle = document.getElementById('notificationToggle');
+        const notificationStatus = document.getElementById('notificationStatus');
+        const devicesOn = document.getElementById('devicesOn');
+        const devicesOff = document.getElementById('devicesOff');
+        const totalSchedules = document.getElementById('totalSchedules');
+        const totalSchedules2 = document.getElementById('totalSchedules2');
+        const activeCount = document.getElementById('activeCount');
+        const uptime = document.getElementById('uptime');
+
+        // App state
+        let currentUser = null;
+        let currentView = 'homeView';
+        let deviceListeners = [];
+        let username = '';
+        let notificationsEnabled = true;
+        let scheduleCount = 0;
+        let activeDevices = 0;
+        let deviceStates = {}; // Track individual device states
+        let startTime = Date.now();
+
+        // 6 devices (lights/outlets)
+        const devices = [
+            { id: 'L1', name: 'Main Light', icon: 'lightbulb' },
+            { id: 'L2', name: 'Bed Lamp', icon: 'moon' },
+            { id: 'L3', name: 'AC Socket', icon: 'snowflake' },
+            { id: 'L4', name: 'Socket 1', icon: 'plug' },
+            { id: 'L5', name: 'Socket 2', icon: 'bolt' },
+            { id: 'L6', name: 'Socket 3', icon: 'power-off' }
+        ];
+
+        // Calculate uptime
+        function calculateUptime() {
+            const now = Date.now();
+            const diff = now - startTime;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours}h ${minutes}m`;
+        }
+
+        // Update stats
+        function updateStats() {
+            devicesOn.textContent = activeDevices;
+            devicesOff.textContent = devices.length - activeDevices;
+            totalSchedules.textContent = scheduleCount;
+            totalSchedules2.textContent = scheduleCount;
+            activeCount.textContent = `${activeDevices} ACTIVE`;
+            uptime.textContent = calculateUptime();
+            
+            // Add animation to stats
+            devicesOn.classList.add('stat-value');
+            devicesOff.classList.add('stat-value');
+            setTimeout(() => {
+                devicesOn.classList.remove('stat-value');
+                devicesOff.classList.remove('stat-value');
+            }, 500);
+        }
+
+        // Count active devices
+        function countActiveDevices() {
+            let count = 0;
+            for (const deviceId in deviceStates) {
+                if (deviceStates[deviceId]) {
+                    count++;
+                }
+            }
+            activeDevices = count;
+            updateStats();
+        }
+
+        // Vibration helper function
+        function vibrate(element) {
+            if (element) {
+                // Add vibration class
+                element.classList.add('vibrate');
+                
+                // Remove vibration class after animation completes
+                setTimeout(() => {
+                    element.classList.remove('vibrate');
+                }, 200);
+            }
+        }
+
+        // Create ripple effect
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement('span');
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add('ripple');
+
+            const ripple = button.getElementsByClassName('ripple')[0];
+            if (ripple) {
+                ripple.remove();
+            }
+
+            button.appendChild(circle);
+        }
+
+        // Add ripple effect to buttons
+        function addRippleEffect() {
+            const buttons = document.querySelectorAll('.btn, .device-card, .nav-item, .settings-item, .schedule-item');
+            buttons.forEach(button => {
+                button.addEventListener('click', createRipple);
+            });
+        }
+
+        // Initialize the app
+        function initApp() {
+            // Start uptime timer
+            setInterval(() => {
+                updateStats();
+            }, 60000);
+
+            // Auth state observer
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    username = getUsernameFromEmail(user.email);
+                    showApp();
+                    setupDevices();
+                    loadSchedules();
+                    checkScheduledEvents();
+                    updateStats();
+                    // Add ripple effect after app is shown
+                    setTimeout(addRippleEffect, 100);
+                } else {
+                    showLogin();
+                }
+            });
+
+            // Login button event
+            loginBtn.addEventListener('click', e => {
+                vibrate(loginBtn);
+                const email = loginEmail.value;
+                const password = loginPassword.value;
+                
+                if (email && password) {
+                    loginUser(email, password);
+                } else {
+                    showError('Please enter email and password');
+                }
+            });
+
+            // Signup button event
+            signupBtn.addEventListener('click', e => {
+                vibrate(signupBtn);
+                const email = loginEmail.value;
+                const password = loginPassword.value;
+                
+                if (email && password) {
+                    signupUser(email, password);
+                } else {
+                    showError('Please enter email and password');
+                }
+            });
+
+            // Navigation events
+            navItems.forEach(item => {
+                item.addEventListener('click', e => {
+                    vibrate(item);
+                    const view = e.currentTarget.dataset.view;
+                    if (view && view !== currentView) {
+                        navItems.forEach(nav => nav.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        showView(view);
+                    }
+                });
+            });
+
+            // Add schedule event
+            addScheduleBtn.addEventListener('click', e => {
+                vibrate(addScheduleBtn);
+                addSchedule();
+            });
+
+            // Update schedule device dropdown
+            updateScheduleDeviceDropdown();
+
+            // Notification toggle event
+            notificationToggle.addEventListener('click', e => {
+                vibrate(notificationToggle.parentElement);
+            });
+            
+            notificationToggle.addEventListener('change', e => {
+                notificationsEnabled = e.target.checked;
+                notificationStatus.textContent = notificationsEnabled ? 
+                    'Game alerts are ON' : 'Notifications disabled';
+                
+                if (currentUser && username) {
+                    const notificationRef = database.ref(`${username}/settings/notifications`);
+                    notificationRef.set(notificationsEnabled);
+                }
+            });
+
+            // Logout event
+            logoutBtn.addEventListener('click', e => {
+                vibrate(logoutBtn);
+                logoutUser();
+            });
+
+            // Add vibration to input fields on focus
+            const inputFields = document.querySelectorAll('.input-field, .select-field, .time-input');
+            inputFields.forEach(input => {
+                input.addEventListener('focus', (e) => {
+                    vibrate(e.target);
+                });
+            });
+        }
+
+        // Get username from email
+        function getUsernameFromEmail(email) {
+            return email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_');
+        }
+
+        // Show error message
+        function showError(message) {
+            loginError.textContent = message;
+            loginError.classList.add('error-animation');
+            setTimeout(() => {
+                loginError.classList.remove('error-animation');
+            }, 500);
+            setTimeout(() => {
+                loginError.textContent = '';
+            }, 3000);
+        }
+
+        // Login user with email and password
+        function loginUser(email, password) {
+            loginBtn.classList.add('success-animation');
+            setTimeout(() => {
+                loginBtn.classList.remove('success-animation');
+            }, 500);
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .catch(error => {
+                    showError(error.message);
+                });
+        }
+
+        // Sign up new user
+        function signupUser(email, password) {
+            signupBtn.classList.add('success-animation');
+            setTimeout(() => {
+                signupBtn.classList.remove('success-animation');
+            }, 500);
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    username = getUsernameFromEmail(email);
+                    // Initialize user data in database
+                    const userRef = database.ref(`${username}`);
+                    
+                    // Create initial data structure
+                    const initialData = {};
+                    
+                    // Initialize all devices to off
+                    devices.forEach(device => {
+                        initialData[device.id] = false;
+                    });
+                    
+                    // Add settings
+                    initialData['settings'] = { notifications: true };
+                    
+                    userRef.set(initialData);
+                })
+                .catch(error => {
+                    showError(error.message);
+                });
+        }
+
+        // Logout user
+        function logoutUser() {
+            logoutBtn.classList.add('success-animation');
+            setTimeout(() => {
+                logoutBtn.classList.remove('success-animation');
+            }, 500);
+            
+            auth.signOut()
+                .catch(error => {
+                    showError(error.message);
+                });
+        }
+
+        // Show app view
+        function showApp() {
+            loginView.classList.add('hidden');
+            appView.classList.remove('hidden');
+            userName.textContent = currentUser.email.split('@')[0];
+            profileName.textContent = currentUser.email.split('@')[0];
+            
+            // Load notification settings
+            if (currentUser && username) {
+                const notificationRef = database.ref(`${username}/settings/notifications`);
+                notificationRef.on('value', snapshot => {
+                    const enabled = snapshot.val();
+                    notificationsEnabled = enabled !== null ? enabled : true;
+                    notificationToggle.checked = notificationsEnabled;
+                    notificationStatus.textContent = notificationsEnabled ? 
+                        'Game alerts are ON' : 'Notifications disabled';
+                });
+            }
+        }
+
+        // Show login view
+        function showLogin() {
+            appView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+            currentUser = null;
+            username = '';
+            deviceStates = {};
+            activeDevices = 0;
+            scheduleCount = 0;
+        }
+
+        // Show specific view
+        function showView(view) {
+            // Hide all views
+            homeView.classList.add('hidden');
+            scheduleView.classList.add('hidden');
+            settingsView.classList.add('hidden');
+            
+            // Show the selected view
+            document.getElementById(view).classList.remove('hidden');
+            currentView = view;
+            
+            // If schedule view, update device dropdown
+            if (view === 'scheduleView') {
+                updateScheduleDeviceDropdown();
+            }
+        }
+
+        // Update schedule device dropdown
+        function updateScheduleDeviceDropdown() {
+            // Clear existing options
+            scheduleDevice.innerHTML = '';
+            
+            // Add devices
+            devices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.id;
+                option.textContent = device.name;
+                scheduleDevice.appendChild(option);
+            });
+        }
+
+        // Set up devices
+        function setupDevices() {
+            // Clear previous devices
+            devicesGrid.innerHTML = '';
+            
+            // Remove previous listeners
+            deviceListeners.forEach(listener => listener());
+            deviceListeners = [];
+            deviceStates = {};
+            activeDevices = 0;
+            
+            // Add devices
+            devices.forEach(device => {
+                const deviceCard = createDeviceCard(device.id, device.name, device.icon);
+                devicesGrid.appendChild(deviceCard);
+                
+                // Set up real-time listener for this device
+                if (currentUser && username) {
+                    setupDeviceListener(device.id, deviceCard);
+                }
+            });
+        }
+
+        // Create a device card
+        function createDeviceCard(deviceId, deviceName, icon) {
+            const deviceCard = document.createElement('div');
+            deviceCard.className = 'device-card';
+            deviceCard.id = `device-${deviceId}`;
+            deviceCard.innerHTML = `
+                <div class="device-header">
+                    <div class="device-icon">
+                        <i class="fas fa-${icon}"></i>
+                    </div>
+                    <div class="device-status">OFF</div>
+                </div>
+                <div class="device-info">
+                    <div class="device-name">${deviceName}</div>
+                    <div class="device-desc">Tap to toggle</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            `;
+            
+            // Add click event to toggle device
+            deviceCard.addEventListener('click', (e) => {
+                // Add vibration effect
+                vibrate(deviceCard);
+                
+                // Add success animation for on, error for off
+                const isOn = deviceCard.classList.contains('on');
+                if (!isOn) {
+                    deviceCard.classList.add('success-animation');
+                    setTimeout(() => {
+                        deviceCard.classList.remove('success-animation');
+                    }, 500);
+                } else {
+                    deviceCard.classList.add('error-animation');
+                    setTimeout(() => {
+                        deviceCard.classList.remove('error-animation');
+                    }, 500);
+                }
+                
+                toggleDevice(deviceId);
+            });
+            
+            return deviceCard;
+        }
+
+        // Set up device listener - FIXED
+        function setupDeviceListener(deviceId, deviceCard) {
+            const deviceRef = database.ref(`${username}/${deviceId}`);
+            const listener = deviceRef.on('value', snapshot => {
+                const isOn = snapshot.val();
+                
+                // Update device state tracking
+                const wasOn = deviceStates[deviceId] || false;
+                deviceStates[deviceId] = isOn;
+                
+                // Update active count if state changed
+                if (wasOn !== isOn) {
+                    if (isOn) {
+                        activeDevices++;
+                    } else {
+                        activeDevices--;
+                    }
+                    updateStats();
+                }
+                
+                // Update UI
+                deviceCard.classList.toggle('on', isOn);
+                deviceCard.querySelector('.device-status').textContent = isOn ? 'ON' : 'OFF';
+                deviceCard.querySelector('input[type="checkbox"]').checked = isOn;
+            });
+            
+            deviceListeners.push(() => deviceRef.off('value', listener));
+        }
+
+        // Toggle device state
+        function toggleDevice(deviceId) {
+            if (currentUser && username) {
+                const deviceRef = database.ref(`${username}/${deviceId}`);
+                deviceRef.transaction(current => {
+                    return current === true ? false : true;
+                });
+            }
+        }
+
+        // Add a new schedule
+        function addSchedule() {
+            const device = scheduleDevice.value;
+            const time = scheduleTime.value;
+            const action = scheduleAction.value;
+            const repeat = scheduleRepeat.value;
+            
+            if (!device || !time) {
+                showError('Please select a device and time');
+                return;
+            }
+            
+            if (currentUser && username) {
+                const scheduleId = Date.now().toString();
+                const scheduleRef = database.ref(`${username}/schedules/${scheduleId}`);
+                
+                scheduleRef.set({
+                    device: device,
+                    time: time,
+                    action: action,
+                    repeat: repeat,
+                    enabled: true
+                }).then(() => {
+                    // Reset form
+                    scheduleTime.value = '';
+                    scheduleAction.value = 'on';
+                    scheduleRepeat.value = 'once';
+                    
+                    // Show success message
+                    showError('✓ Schedule added successfully!');
+                    setTimeout(() => {
+                        loginError.textContent = '';
+                    }, 2000);
+                }).catch(error => {
+                    showError('Error adding schedule: ' + error.message);
+                });
+            }
+        }
+
+        // Load schedules - FIXED
+        function loadSchedules() {
+            if (currentUser && username) {
+                // Clear existing schedules
+                scheduleList.innerHTML = '';
+                
+                const schedulesRef = database.ref(`${username}/schedules`);
+                schedulesRef.on('value', snapshot => {
+                    scheduleList.innerHTML = '';
+                    scheduleCount = 0;
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const schedule = childSnapshot.val();
+                        const scheduleId = childSnapshot.key;
+                        scheduleCount++;
+                        
+                        const scheduleItem = document.createElement('div');
+                        scheduleItem.className = 'schedule-item';
+                        scheduleItem.style.cssText = `
+                            background: var(--gradient-dark);
+                            border-radius: 16px;
+                            padding: 20px;
+                            margin-bottom: 12px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            cursor: pointer;
+                            border: 1px solid rgba(255, 255, 255, 0.05);
+                            position: relative;
+                            overflow: hidden;
+                        `;
+                        
+                        // Get device name
+                        let deviceName = schedule.device;
+                        const device = devices.find(d => d.id === schedule.device);
+                        deviceName = device ? device.name : schedule.device;
+                        
+                        scheduleItem.innerHTML = `
+                            <div class="schedule-info">
+                                <div class="schedule-time" style="font-weight: 700; color: var(--secondary); margin-bottom: 6px;">${schedule.time} • ${schedule.repeat}</div>
+                                <div class="schedule-action" style="color: var(--text-muted); font-size: 0.9rem;">
+                                    ${deviceName} • ${schedule.action === 'on' ? 'TURN ON' : 'TURN OFF'}
+                                </div>
+                            </div>
+                            <div class="schedule-delete" data-id="${scheduleId}" style="color: var(--danger); padding: 10px; border-radius: 10px; transition: background 0.3s ease;">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        `;
+                        
+                        scheduleList.appendChild(scheduleItem);
+                        
+                        // Add click event with vibration
+                        scheduleItem.addEventListener('click', (e) => {
+                            if (!e.target.closest('.schedule-delete')) {
+                                vibrate(scheduleItem);
+                            }
+                        });
+                        
+                        // Add delete event
+                        scheduleItem.querySelector('.schedule-delete').addEventListener('click', e => {
+                            e.stopPropagation();
+                            vibrate(scheduleItem);
+                            deleteSchedule(scheduleId);
+                        });
+                    });
+                    
+                    updateStats();
+                });
+            }
+        }
+
+        // Check for scheduled events
+        function checkScheduledEvents() {
+            if (currentUser && username) {
+                const schedulesRef = database.ref(`${username}/schedules`);
+                schedulesRef.on('value', snapshot => {
+                    const now = new Date();
+                    const currentTime = now.toTimeString().substring(0, 5);
+                    const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const schedule = childSnapshot.val();
+                        if (schedule.enabled && schedule.time === currentTime) {
+                            // Check if schedule should run today
+                            let shouldRun = false;
+                            
+                            if (schedule.repeat === 'daily') {
+                                shouldRun = true;
+                            } else if (schedule.repeat === 'weekdays' && currentDay >= 1 && currentDay <= 5) {
+                                shouldRun = true;
+                            } else if (schedule.repeat === 'weekends' && (currentDay === 0 || currentDay === 6)) {
+                                shouldRun = true;
+                            } else if (schedule.repeat === 'once') {
+                                shouldRun = true;
+                                // Disable one-time schedules after they run
+                                schedulesRef.child(childSnapshot.key).update({ enabled: false });
+                            }
+                            
+                            if (shouldRun) {
+                                executeSchedule(schedule);
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Check every minute
+            setTimeout(checkScheduledEvents, 60000);
+        }
+
+        // Execute a schedule
+        function executeSchedule(schedule) {
+            // Handle device schedule
+            const deviceRef = database.ref(`${username}/${schedule.device}`);
+            deviceRef.set(schedule.action === 'on');
+        }
+
+        // Delete schedule
+        function deleteSchedule(scheduleId) {
+            if (currentUser && username && confirm('Are you sure you want to delete this schedule?')) {
+                const scheduleRef = database.ref(`${username}/schedules/${scheduleId}`);
+                scheduleRef.remove()
+                    .catch(error => {
+                        showError('Error deleting schedule: ' + error.message);
+                    });
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
